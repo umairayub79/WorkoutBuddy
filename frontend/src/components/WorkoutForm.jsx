@@ -30,7 +30,7 @@ const WorkoutForm = () => {
         } catch (error) {
             if (error.response) {
                 const { data } = error.response
-                setError(data.error)
+                setError(data.message);
             } else {
                 console.log('Error adding workout:', error)
             }
@@ -57,6 +57,8 @@ const WorkoutForm = () => {
                 value={reps} />
 
             <button type='submit'>Add</button>
+            {error && <div className="error">{error}</div>}
+
         </form>
     )
 }
