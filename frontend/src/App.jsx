@@ -1,28 +1,35 @@
-import { useState } from 'react'
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Link,
-} from "react-router-dom";
-
-import Home from './pages/Home';
-import Navbar from './components/Navbar';
-
-function App() {
-
+import React, { useContext } from "react";
+import { NavbarSimple } from "./components/Navbar";
+import { Routes, Route, Navigate } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+import ToastContainer from "./components/Toast/ToastContainer";
+import { AuthContext } from "./context/Auth/AuthContext";
+import RecordsPage from "./pages/RecordsPage";
+import HomePage from "./pages/HomePage";
+const App = () => {
+  const { state } = useContext(AuthContext);
+  console.log(state?.token ? "Loggedin " : "Not logged in");
   return (
-    <div className='App'>
-      <BrowserRouter>
-        <Navbar />
-        <div className="pages">
-          <Routes>
-            <Route path="/" element={<Home />} />
-          </Routes>
-        </div>
-      </BrowserRouter>
+    <div>
+      <NavbarSimple />
+      <Routes>
+        <Route
+          path="/"
+          element={state?.token ? <RecordsPage/> : <HomePage />}
+        />
+        <Route
+          path="/login"
+          element={state?.token ? <Navigate to="/" /> : <LoginPage />}
+        />
+        <Route
+          path="/signup"
+          element={state?.token ? <Navigate to="/" /> : <SignupPage />}
+        />
+      </Routes>
+      <ToastContainer />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
